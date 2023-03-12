@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Builder</title>
+    <style>
+        .upload_outfit {
+            padding: 1px;
+            border-radius: 10px;
+            align-items: center;
+            text-align: center;
+            align-self: auto;
+            font-size: large;
+            margin-left: 200px;
+            margin-right: 470px;
+        }
+
+        .submit_pos {
+            margin-left: 600px;
+        }
+
+        h1 {
+            color: rgb(54, 107, 1);
+        }
+
+        .download {
+            margin-left: 600px;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="/">
+                    <h1>ML Builder</h1>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">About</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Features</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <br>
+
+
+    <!-- Drag and drop -->
+    <div class="container">
+        <div class="upload_outfit">
+            <form method="POST" enctype="multipart/form-data" action="/upload">
+                <div class="btn-group btn-group-sm" role="group" aria-label="..."><button
+                        class="btn btn-outline-success" type="submit"><input type="file" name="datafile"
+                            accept=".csv"></button></div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="..."><button
+                        class="btn btn-outline-success" type="submit"><input type="submit" value="Upload"></button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <br>
+
+    <!-- columns showing -->
+    <div class="container">
+        <div class="btn-group" role="group" aria-label="Basic radio toggle button group"></div>
+        {% if start %}
+        <h5>Choose Target Column:</h5> <br>
+        {% for col in cols %}
+        <div class="btn-group btn-group-sm" role="group" aria-label="...">
+            <a href="/target_col/{{col}}" class="btn btn-outline-success">{{col}}</a>
+        </div>
+        {% endfor %}
+        {% endif %}
+    </div>
+    </div>
+    <br>
+
+    <!-- build model and customize-->
+    <div class="container">
+        <nav class="navbar">
+            <div class="container-fluid">
+                <form action="/build_model" method="POST">
+                    <label for="target_name">Enter Target:</label>
+                    <input type="text" value="{{tar_col}}" name="target_name">
+                    <div class="btn-group btn-group-sm" role="group" aria-label="..."><button
+                            class="btn btn-outline-success" type="submit">Build Model</button></div>
+                </form>
+                <form action="/customize" method='POST'>
+                    <div class="btn-group btn-group-sm" role="group" aria-label="..."><button
+                            class="btn btn-outline-success" type="submit">Customize</button>
+                    </div>
+                </form>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <div class="alert alert-success" role="alert">
+            {% if dictionary %}
+            {% for key,val in dictionary.items() %}
+            {{key}}: {{val}} <br>
+            {% endfor %}
+            {% else %}
+            Output will print here
+            {% endif %}
+        </div>
+    </div>
+    <br>
+
+    <!-- {% if download_link %}
+    <div class="container">
+        <a href="/static/mlmodel.pkl" download>
+            <button value="owned_model" class="btn btn-outline-success" type="submit">Download Model</button>
+        </a>
+    </div>
+    <hr>
+    <div class="container">
+        <a href="/static/X_train.csv" download>
+            <button value="owned_model" class="btn btn-outline-success" type="submit">Download X_train</button>
+        </a>
+    </div>
+    {% endif %} -->
+
+    {% if download_link %}
+    <div class="container">
+        <nav class="navbar">
+            <div class="container-fluid">
+                    <a href="/static/mlmodel.pkl" download>
+                        <button value="owned_model" class="btn btn-outline-success" type="submit">Download
+                            Model</button>
+                    </a>
+                    <a href="/static/X_train.csv" download>
+                        <button value="owned_model" class="btn btn-outline-success" type="submit">Download
+                            X_train</button>
+                    </a>
+                    <a href="/static/X_test.csv" download>
+                        <button value="owned_model" class="btn btn-outline-success" type="submit">Download
+                            X_test</button>
+                    </a>
+                    <a href="/static/y_train.csv" download>
+                        <button value="owned_model" class="btn btn-outline-success" type="submit">Download
+                            y_train</button>
+                    </a>
+                    <a href="/static/y_test.csv" download>
+                        <button value="owned_model" class="btn btn-outline-success" type="submit">Download
+                            y_test</button>
+                    </a>
+            </div>
+        </nav>
+    </div>
+    {% endif %}
+</body>
+
+</html>
